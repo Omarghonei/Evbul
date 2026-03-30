@@ -1,0 +1,19 @@
+{
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://your-future-backend.onrender.com/api/$1"
+    },
+    {
+      "source": "/socket.io/(.*)",
+      "destination": "https://your-future-backend.onrender.com/socket.io/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
