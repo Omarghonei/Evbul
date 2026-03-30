@@ -24,7 +24,6 @@ const Messages = () => {
     .catch(console.error);
 
     // Setup Socket
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
     const newSocket = io(BACKEND_URL || '/');
     setSocket(newSocket);
     newSocket.emit('join', user.id);
