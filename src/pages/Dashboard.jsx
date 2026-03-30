@@ -30,8 +30,7 @@ const Dashboard = () => {
         const uploadData = new FormData();
         Array.from(files).forEach(f => uploadData.append('images', f));
         
-        const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
-        const uploadRes = await fetch(`${BACKEND_URL}/api/upload`, {
+        const uploadRes = await fetch('/api/upload', {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` },
           body: uploadData
@@ -42,8 +41,7 @@ const Dashboard = () => {
       }
 
       // Save Listing to MongoDB
-      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
-      const res = await fetch(`${BACKEND_URL}/api/listings`, {
+      const res = await fetch('/api/listings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

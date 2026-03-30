@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
-import { io } from 'socket.io-client';
 
 const Messages = () => {
   const { user, token } = useAuth();
@@ -14,31 +13,20 @@ const Messages = () => {
   if (!user) return <Navigate to="/login" />;
 
   useEffect(() => {
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
     // Fetch conversations
-    fetch(`${BACKEND_URL}/api/messages/conversations`, {
+    fetch('/api/messages/conversations', {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(r => r.json())
     .then(data => setConversations(data))
     .catch(console.error);
 
-    // Setup Socket
-    const newSocket = io(BACKEND_URL || '/');
-    setSocket(newSocket);
-    newSocket.emit('join', user.id);
-
-    newSocket.on('receive_message', (msg) => {
-      setMessages(prev => [...prev, msg]);
-    });
-
-    return () => newSocket.disconnect();
+    // Socket.io removed due to Vercel Serverless environment limitations
   }, [token, user.id]);
 
   useEffect(() => {
     if (activeChat) {
-      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
-      fetch(`${BACKEND_URL}/api/messages/${activeChat.user._id}`, {
+      fetch(`/api/messages/${activeChat.user._id}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(r => r.json())
@@ -52,8 +40,7 @@ const Messages = () => {
     if(!inputText.trim() || !activeChat) return;
 
     try {
-      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
-      const res = await fetch(`${BACKEND_URL}/api/messages`, {
+      const res = await fetch('/api/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ receiverId: activeChat.user._id, text: inputText })
@@ -61,7 +48,7 @@ const Messages = () => {
       const data = await res.json();
       
       setMessages(prev => [...prev, data]);
-      socket.emit('send_message', { receiverId: activeChat.user._id, msgData: data });
+      // Real-time broadcast disabled via Serverless Architecture constraint
       setInputText('');
     } catch (err) {
       console.error(err);
