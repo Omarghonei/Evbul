@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
 
 const Messages = () => {
   const { user, token } = useAuth();
@@ -21,7 +22,16 @@ const Messages = () => {
     .then(data => setConversations(data))
     .catch(console.error);
 
-    // Socket.io removed due to Vercel Serverless environment limitations
+    // Setup Socket
+    const newSocket = io('/');
+    setSocket(newSocket);
+    newSocket.emit('join', user.id);
+
+    newSocket.on('receive_message', (msg) => {
+      setMessages(prev => [...prev, msg]);
+    });
+
+    return () => newSocket.disconnect();
   }, [token, user.id]);
 
   useEffect(() => {
@@ -48,7 +58,7 @@ const Messages = () => {
       const data = await res.json();
       
       setMessages(prev => [...prev, data]);
-      // Real-time broadcast disabled via Serverless Architecture constraint
+      if(socket) socket.emit('send_message', { receiverId: activeChat.user._id, msgData: data });
       setInputText('');
     } catch (err) {
       console.error(err);

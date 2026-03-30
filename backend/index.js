@@ -1,4 +1,6 @@
 import express from 'express';
+import http from 'http';
+import { Server } from 'socket.io';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
@@ -18,6 +20,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: { origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE'] }
+});
 
 app.use(cors());
 app.use(express.json());
@@ -72,7 +78,7 @@ app.post('/api/listings', protect, async (req, res) => {
     await newListing.save();
     
     const formatted = {...newListing.toObject(), id: newListing._id.toString()};
-    // Broadcast removed
+    io.emit('NEW_LISTING', formatted); // Real-time Update Broadcast
     res.status(201).json(formatted);
   } catch(err) {
     res.status(400).json({error: err.message});
@@ -85,7 +91,7 @@ app.put('/api/listings/:id', protect, async (req, res) => {
     if (!updated) return res.status(404).json({error: 'İlan bulunamadı'});
     
     const formatted = {...updated.toObject(), id: updated._id.toString()};
-    // Broadcast removed
+    io.emit('UPDATE_LISTING', formatted); // Real-time Update Broadcast
     res.json(formatted);
   } catch(err) {
     res.status(400).json({error: err.message});
@@ -95,12 +101,31 @@ app.put('/api/listings/:id', protect, async (req, res) => {
 app.delete('/api/listings/:id', protect, async (req, res) => {
   try {
     await Listing.findByIdAndDelete(req.params.id);
-    // Broadcast removed
+    io.emit('DELETE_LISTING', req.params.id); // Real-time Delete Broadcast
     res.json({ success: true });
   } catch(err) {
     res.status(400).json({error: err.message});
   }
 });
 
-// Export Express App for Vercel Serverless Configuration
-export default app;
+// Real-time Chat & WebSockets
+io.on('connection', (socket) => {
+  console.log(`[Socket] Müşteri bağlandı: ${socket.id}`);
+  
+  socket.on('join', (userId) => {
+    socket.join(userId);
+  });
+
+  socket.on('send_message', (data) => {
+    io.to(data.receiverId).emit('receive_message', data.msgData);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`[Socket] Müşteri ayrıldı: ${socket.id}`);
+  });
+});
+
+const PORT = process.env.PORT || 3001;
+server.listen(PORT, () => {
+  console.log(`🚀 Evbul Backend API ve WebSockets ${PORT} portunda çalışıyor.`);
+});
