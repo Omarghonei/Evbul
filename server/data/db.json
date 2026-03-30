@@ -1,0 +1,72 @@
+{
+  "listings": [
+    {
+      "id": 1,
+      "type": "shared",
+      "title": "Modern Paylaşımlı Oda",
+      "city": "Kadıköy, İstanbul",
+      "price": "4500",
+      "bills": "600",
+      "image": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=400&fit=crop",
+      "occupants": 2,
+      "missing": 1
+    },
+    {
+      "id": 2,
+      "type": "apartment",
+      "title": "1+1 Eşyalı Daire",
+      "city": "Beşiktaş, İstanbul",
+      "price": "12000",
+      "bills": "Dahil",
+      "image": "https://images.unsplash.com/photo-1502672260266-1c1de2d9d000?w=600&h=400&fit=crop",
+      "occupants": 0,
+      "missing": 0,
+      "isFull": false
+    },
+    {
+      "id": 3,
+      "type": "shared",
+      "title": "Geniş 3+1 Öğrenci Evi",
+      "city": "Çankaya, Ankara",
+      "price": "3000",
+      "bills": "450",
+      "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=400&fit=crop",
+      "occupants": 3,
+      "missing": 1
+    },
+    {
+      "id": 4,
+      "type": "room",
+      "title": "Metroya Yakın Tek Kişilik",
+      "city": "Bornova, İzmir",
+      "price": "4000",
+      "bills": "800",
+      "image": "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600&h=400&fit=crop",
+      "occupants": 2,
+      "missing": 1
+    },
+    {
+      "id": 5,
+      "type": "apartment",
+      "title": "Öğrenciye Uygun 2+1",
+      "city": "Şişli, İstanbul",
+      "price": "15000",
+      "bills": "Ekstra",
+      "image": "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=600&h=400&fit=crop",
+      "occupants": 0,
+      "missing": 0,
+      "isFull": false
+    },
+    {
+      "id": 6,
+      "type": "shared",
+      "title": "Manzaralı Ortak Oda",
+      "city": "Üsküdar, İstanbul",
+      "price": "3500",
+      "bills": "500",
+      "image": "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600&h=400&fit=crop",
+      "occupants": 1,
+      "missing": 2
+    }
+  ]
+}
