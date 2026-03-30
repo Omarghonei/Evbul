@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev:ui": "vite --host",
-    "dev:api": "node server/index.js",
+    "dev:api": "node api/index.js",
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:ui\"",
     "tunnel": "npx localtunnel --port 5173 --subdomain evbul-app",
-    "start": "node server/index.js",
+    "start": "node api/index.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
