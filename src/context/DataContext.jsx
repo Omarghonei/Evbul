@@ -3,8 +3,9 @@ import { io } from 'socket.io-client';
 
 const DataContext = createContext();
 
-const SOCKET_URL = '/';
-const API_URL = '/api/listings';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
+const SOCKET_URL = BACKEND_URL || '/';
+const API_URL = `${BACKEND_URL}/api/listings`;
 
 export const DataProvider = ({ children }) => {
   const [listings, setListings] = useState([]);

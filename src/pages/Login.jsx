@@ -18,7 +18,8 @@ const Login = () => {
     setError('');
     setLoading(true);
 
-    const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
+    const endpoint = BACKEND_URL + (isLogin ? '/api/auth/login' : '/api/auth/register');
     const payload = isLogin 
       ? { email: formData.email, password: formData.password }
       : { ...formData, role: role === 'seeker' ? 'student' : 'landlord' };

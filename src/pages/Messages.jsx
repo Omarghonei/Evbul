@@ -14,8 +14,9 @@ const Messages = () => {
   if (!user) return <Navigate to="/login" />;
 
   useEffect(() => {
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
     // Fetch conversations
-    fetch('/api/messages/conversations', {
+    fetch(`${BACKEND_URL}/api/messages/conversations`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(r => r.json())
@@ -23,7 +24,8 @@ const Messages = () => {
     .catch(console.error);
 
     // Setup Socket
-    const newSocket = io('/');
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
+    const newSocket = io(BACKEND_URL || '/');
     setSocket(newSocket);
     newSocket.emit('join', user.id);
 
@@ -36,7 +38,8 @@ const Messages = () => {
 
   useEffect(() => {
     if (activeChat) {
-      fetch(`/api/messages/${activeChat.user._id}`, {
+      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
+      fetch(`${BACKEND_URL}/api/messages/${activeChat.user._id}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(r => r.json())
@@ -50,7 +53,8 @@ const Messages = () => {
     if(!inputText.trim() || !activeChat) return;
 
     try {
-      const res = await fetch('/api/messages', {
+      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
+      const res = await fetch(`${BACKEND_URL}/api/messages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ receiverId: activeChat.user._id, text: inputText })

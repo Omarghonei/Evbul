@@ -8,7 +8,7 @@ const Admin = () => {
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({});
 
-  const API_URL = '/api/listings';
+  const API_URL = `${import.meta.env.VITE_BACKEND_URL || ''}/api/listings`;
 
   if (loading) return <div className="container py-20 text-center font-bold">Veriler Yükleniyor... (Backend'i başlattığınıza emin olun)</div>;
 
